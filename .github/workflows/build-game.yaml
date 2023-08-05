@@ -4,6 +4,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  CARGO_TERM_COLOR: always
+
 on:
   workflow_dispatch:
     inputs:
@@ -18,14 +21,26 @@ on:
 jobs:
   build-windows:
     runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v2
-      - name: Install latest rust toolchain
+
+      - name: setup rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
           default: true
           override: true
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ github.ref || github.run_id }}
 
       - name: Build
         run: cargo build --bin ${{ inputs.game }} --release
