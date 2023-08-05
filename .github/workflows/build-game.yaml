@@ -40,7 +40,7 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ github.ref || github.run_id }}
+          key: ${{ github.ref || github.run_id }}-windows
 
       - name: Build
         run: cargo build --bin ${{ inputs.game }} --release
@@ -71,7 +71,7 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ github.ref || github.run_id }}
+          key: ${{ github.ref || github.run_id }}-wasm
 
       - name: Build
         run: cargo build --bin ${{ inputs.game }} --release --target wasm32-unknown-unknown
@@ -103,7 +103,7 @@ jobs:
             ~/.cargo/registry/cache/
             ~/.cargo/git/db/
             target/
-          key: ${{ github.ref || github.run_id }}
+          key: ${{ github.ref || github.run_id }}-mac
 
       - name: Build
         run: cargo build --bin ${{ inputs.game }} --release
