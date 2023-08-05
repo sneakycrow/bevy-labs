@@ -49,3 +49,65 @@ jobs:
         with:
           name: ${{ inputs.game }}-windows
           path: target/release/${{ inputs.game }}.exe
+  build-wasm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: setup rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          default: true
+          override: true
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ github.ref || github.run_id }}
+
+      - name: Build
+        run: cargo build --bin ${{ inputs.game }} --release --target wasm32-unknown-unknown
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.game }}-wasm
+          path: target/release/${{ inputs.game }}.wasm
+
+      # TODO: Add step to package wasm for web
+  build-macos:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: setup rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          default: true
+          override: true
+
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ github.ref || github.run_id }}
+
+      - name: Build
+        run: cargo build --bin ${{ inputs.game }} --release
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.game }}-macos
+          path: target/release/${{ inputs.game }}
