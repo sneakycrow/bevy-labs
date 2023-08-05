@@ -8,9 +8,12 @@ on:
   workflow_dispatch:
     inputs:
       game:
-        description: 'Cargo.toml name value for game'
+        description: 'Game to build binaries for'
         required: true
-        default: 'basic'
+        type: choice
+        options:
+          - 'basic'
+          - 'cube-spawner'
 
 jobs:
   build-windows:
