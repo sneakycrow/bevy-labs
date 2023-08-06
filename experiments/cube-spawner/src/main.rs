@@ -3,11 +3,15 @@
 use bevy::prelude::*;
 use bevy_xpbd_3d::{math::*, prelude::*};
 
-mod xpbd_example;
+mod plugins;
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, xpbd_example::XpbdExamplePlugin))
+        .add_plugins((
+            DefaultPlugins,
+            PhysicsPlugins::default(),
+            plugins::fps_counter::FPSCounterPlugin,
+        ))
         .insert_resource(ClearColor(Color::rgb(0.05, 0.05, 0.1)))
         .insert_resource(Msaa::Sample4)
         .add_systems(Startup, setup)
